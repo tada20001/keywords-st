@@ -1,0 +1,7 @@
+*.xlsx
+DrawWordcloud.py
+*.ipynb
+__pycache__/
+.ipynb_checkpoints/
+*.json
+.vs/
