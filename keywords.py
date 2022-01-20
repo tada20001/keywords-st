@@ -6,7 +6,6 @@ import base64
 from nltk import Text
 from nltk import FreqDist
 from wordcloud import WordCloud
-import xlrd
 
 st.write("""
 # Making WordCloud
