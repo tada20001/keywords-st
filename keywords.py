@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
 import streamlit as st
 import base64
 from nltk import Text
@@ -18,27 +19,33 @@ expander_bar1.markdown("""
 * 아래의 에러문구는 파일을 업로드하면 사라집니다. (나중에 해결!!)
 """)
 
-mpl.rc('font', family='NanumGothic')
-
+# mpl.rc('font', family='NanumGothic')
 mpl.rcParams['font.size'] = 15
+font_name = FontProperties(fname='.fonts/NanumGothic.ttf').get_name()
+mpl.rc('font', family=font_name)
+
 # 유니코드에서 음수 부호 설정
 mpl.rc('axes', unicode_minus=False)
 # 그래프 기본사이즈 설정
 plt.rcParams["figure.figsize"] = (10,8)
 
+### input features in the sidebar
 st.sidebar.header('User Input Features')
-
 # 0. 파일 열기
 # Collects user input features into dataframe
-uploaded_file = st.sidebar.file_uploader("Upload your input excel file", type=["xlsx"])
+uploaded_file = st.sidebar.file_uploader("Upload your excel file", type=["xlsx"])
 input_df = pd.read_excel(uploaded_file)
-
-
-### input features in the sidebar
+st.sidebar.write("""
+***
+""")
 
 # 1. 순위 지정
 st.sidebar.subheader('단어 갯수 설정')
 rank = st.sidebar.slider('ex) 최다빈도 단어 1위부터 30위까지 보여주려면 30으로 지정', 10, 100, 30)
+
+st.sidebar.write("""
+***
+""")
 
 # 2. 카운팅 안할 단어 지정
 st.sidebar.write("""
@@ -83,7 +90,7 @@ def tokenizer(df, words):
     return result
 
 tokens = tokenizer(input_df, words)
-st.write(words)
+#st.write(words)
 
 # 4. 그래프 그리기
 st.subheader('1. Display a plot')
@@ -107,8 +114,8 @@ st.write("""
 ***
 """)
 
-# 5. Display dataframe
-st.subheader('2. Display a table')
+# 5. Download dataframe
+st.subheader('2. Download a table')
 
 # 가장 많이 사용된 단어 카운팅
 @st.cache
@@ -119,7 +126,7 @@ def get_most_common_words(tokens, rank):
 most_words, fd_names = get_most_common_words(tokens, rank)
 most_df = pd.DataFrame(most_words, columns=['단어', '빈도'])
 
-st.dataframe(most_df.head())
+st.dataframe(most_df.head(10))
 
 
 # https://discuss.streamlit.io/t/how-to-download-file-in-streamlit/1806
@@ -135,15 +142,18 @@ st.write("""
 """)
 
 ## 6. Display wordcloud
-@st.cache
 def draw_wordcloud(fd):
-    wc = WordCloud(width=1000, height=600, background_color='white', font_path='font/NanumGothic.ttf')
+    wc = WordCloud(width=1000, height=600, background_color='white', font_path='.fonts/NanumGothic.ttf')
     plt.imshow(wc.generate_from_frequencies(fd))
     plt.axis('off')
     plt.show()
-
 
 st.subheader('3. Create a wordcloud image')
 if st.button('워드클라우드 표시'):
     draw_wordcloud(fd_names)
     st.pyplot(plt)
+
+st.write("""
+***
+""")
+
