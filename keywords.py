@@ -104,7 +104,7 @@ filename = 'ex1.png'
 figsize = (12, 6)
 expander_bar2 = st.expander("About")
 expander_bar2.markdown("""
-        * 그래프에 표시된 단어들을 보면서 의미없는 단어가 있으면 제외해 주세요
+        * 그래프에 표시된 단어들을 확인하면서 의미없는 단어는 제외해 주세요
 """)
 
 if st.button('그래프 표시'):
