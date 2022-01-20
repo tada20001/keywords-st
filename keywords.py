@@ -14,13 +14,19 @@ st.write("""
 """)
 expander_bar1 = st.expander("About")
 expander_bar1.markdown("""
-* NTIS 한글 키워드를 이용해 워드 클라우드를 그립니다.
+* NTIS의 한글 키워드 정보를 이용해 워드 클라우드를 그립니다.
 * 입력 엑셀파일에 "한글키워드" 필드가 반드시 포함되어 있어야 합니다.
 * 아래의 에러문구는 파일을 업로드하면 사라집니다. (나중에 해결!!)
+
+    * 첫째, 왼쪽편에 단어갯수를 먼저 지정
+    * 둘째, 제외할 단어를 지정
+    * 셋째, 그래프로 확인
+    * 위의 순서를 반복하면서 단어 갯수와  제외할 단어 결정
+
 """)
 
 # mpl.rc('font', family='NanumGothic')
-mpl.rcParams['font.size'] = 15
+mpl.rcParams['font.size'] = 13
 font_name = FontProperties(fname='.fonts/NanumGothic.ttf').get_name()
 mpl.rc('font', family=font_name)
 
