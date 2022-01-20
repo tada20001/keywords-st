@@ -10,7 +10,7 @@ from nltk import FreqDist
 from wordcloud import WordCloud
 
 st.write("""
-# Making WordCloud
+# WordCloud Generator
 """)
 expander_bar1 = st.expander("About")
 expander_bar1.markdown("""
@@ -18,10 +18,10 @@ expander_bar1.markdown("""
 * 입력 엑셀파일에 "한글키워드" 필드가 반드시 포함되어 있어야 합니다.
 * 아래의 에러문구는 파일을 업로드하면 사라집니다. (나중에 해결!!)
 
-    * 첫째, 왼쪽편에 단어갯수를 먼저 지정
-    * 둘째, 제외할 단어를 지정
-    * 셋째, 그래프로 확인
-    * 위의 순서를 반복하면서 단어 갯수와  제외할 단어 결정
+    * 첫째, 왼쪽 Side bar에서 단어갯수 지정
+    * 둘째, 왼쪽 Side bar에서 제외할 단어 지정
+    * 셋째, 메인에서 플롯으로 확인
+    * 위의 순서를 반복하면서 단어 갯수와 제외할 단어 결정
 
 """)
 
