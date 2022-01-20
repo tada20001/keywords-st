@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 import streamlit as st
 import base64
@@ -18,6 +19,7 @@ expander_bar1.markdown("""
 """)
 
 mpl.rc('font', family='NanumGothic')
+
 mpl.rcParams['font.size'] = 15
 # 유니코드에서 음수 부호 설정
 mpl.rc('axes', unicode_minus=False)
@@ -33,24 +35,25 @@ input_df = pd.read_excel(uploaded_file)
 
 
 ### input features in the sidebar
-# 1. 카운팅 안할 단어 지정
+
+# 1. 순위 지정
+st.sidebar.subheader('단어 갯수 설정')
+rank = st.sidebar.slider('ex) 최다빈도 단어 1위부터 30위까지 보여주려면 30으로 지정', 10, 100, 30)
+
+# 2. 카운팅 안할 단어 지정
 st.sidebar.write("""
-### 카운팅에서 제외할 단어 지정
+### 제외할 단어 지정
 """)
-stop_words = ['및', '환경', '오염', '|', '및', '초', '성', '기술', '시스템', \
+stop_words = '및', '환경', '오염', '|', '및', '초', '성', '기술', '시스템', \
               '구조', '의', '중심으로', '관한', '대한', ':', '기반', '효과', \
               '개발', '에', '과', '연구', '적', '방법', '위한','변화', '미치는',\
-              '활용', '-', '난', '프로', '미세먼지']
+              '활용', '-', '난', '프로', '미세먼지'
 
 words = st.sidebar.text_area("제외할 단어를 따옴표로 감싸 아래와 같이 입력", stop_words, height=250)
 
 st.sidebar.write("""
 ***
 """)
-
-# 2. 순위 지정
-st.sidebar.subheader('최다빈도 단어를 어디까지 나타낼지 순위 지정')
-rank = st.sidebar.slider('ex) 최다빈도 단어 1위부터 30위까지 보여주려면 30으로 지정', 10, 100, 30)
 
 # 3. 토큰 만들기
 def str_keyword(df):
@@ -63,6 +66,7 @@ def str_keyword(df):
             print(type(df.iloc[i]['한글키워드']))
     return string
 
+@st.cache
 def tokenizer(df, words):
     string = str_keyword(df)
     tokens = string.split(',')
@@ -91,9 +95,7 @@ expander_bar2.markdown("""
 """)
 
 if st.button('그래프 표시'):
-    
     st.write('단어별 빈도수 (' + str(rank) + ' Rank 까지)' )
-    
     f, ax = plt.subplots(figsize=figsize)
     common_words = Text(tokens)
     ax = common_words.plot(rank)
@@ -109,6 +111,7 @@ st.write("""
 st.subheader('2. Display a table')
 
 # 가장 많이 사용된 단어 카운팅
+@st.cache
 def get_most_common_words(tokens, rank):
     fd_names = FreqDist(tokens)
     return fd_names.most_common(rank), fd_names
@@ -132,6 +135,7 @@ st.write("""
 """)
 
 ## 6. Display wordcloud
+@st.cache
 def draw_wordcloud(fd):
     wc = WordCloud(width=1000, height=600, background_color='white', font_path='font/NanumGothic.ttf')
     plt.imshow(wc.generate_from_frequencies(fd))
