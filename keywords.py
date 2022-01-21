@@ -23,6 +23,9 @@ expander_bar1.markdown("""
     * 셋째, 메인에서 플롯으로 확인
     * 위의 순서를 반복하면서 단어 갯수와 제외할 단어 결정
 
+* 옵션으로 유사한 단어를 하나로 수정하는 것도 가능합니다. 
+    * 단, 두개 이상의 단어를 수정할 경우, sidebar의 예와 같이 미세먼지를 첫번째로 놓고 초미세먼지를 두번째로 놓으면 알고리즘은 순차적으로 발생하기 때문에 초미세먼지를 완전히 걸러내지 못합니다. 이 경우에는 초미세먼지를 먼저 쓰고 두번째로 미세먼지를 써야 제대로 걸러집니다.
+    * 여러개 단어를 수정하고 싶으면 엑셀에서 작업하는 것을 강력 추천합니다. 여기서는 간단한 단어만 변경.. 
 """)
 
 # mpl.rc('font', family='NanumGothic')
@@ -68,13 +71,20 @@ st.sidebar.write("""
 ***
 """)
 
+st.sidebar.write('단어를 수정할 수 있습니다.')
+input1 = st.sidebar.text_input('변경할 단어1', '미세먼지')
+input2 = st.sidebar.text_input('새로운 단어1', 'DUST')
+input3 = st.sidebar.text_input('변경할 단어2', '초미세먼지')
+input4 = st.sidebar.text_input('새로운 단어2', 'DUST')
+input5 = st.sidebar.text_input('변경할 단어3', '초초미세먼지')
+input6 = st.sidebar.text_input('새로운 단어3', 'DUST')
+
 # 3. 토큰 만들기
 def str_keyword(df):
     string = ''
     for i in range(len(df)):
         try:
-            string += df.iloc[i]['한글키워드'].replace('○ ', '')
-            #print(type(df.iloc[i]['한글키워드']))
+            string += df.iloc[i]['한글키워드'].replace('○ ', '').replace(input1, input2).replace(input3, input4)
         except:
             print(type(df.iloc[i]['한글키워드']))
     return string
@@ -179,3 +189,4 @@ if st.button('워드클라우드(상위랭크만) 표시'):
 st.write("""
 ***
 """)
+
