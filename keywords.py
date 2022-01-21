@@ -133,8 +133,6 @@ most_words, fd_names = get_most_common_words(tokens, rank)
 most_df = pd.DataFrame(most_words, columns=['단어', '빈도'])
 
 st.dataframe(most_df.head(10))
-
-
 # https://discuss.streamlit.io/t/how-to-download-file-in-streamlit/1806
 def filedownload(df):
     csv = df.to_csv(index=False, encoding='utf-8-sig')
@@ -142,7 +140,6 @@ def filedownload(df):
     href = f'<a href="data:file/csv;base64,{b64}" download="common_words.csv">Download CSV File</a>'
     return href
 st.markdown(filedownload(most_df), unsafe_allow_html=True)
-
 st.write("""
 ***
 """)
@@ -163,3 +160,22 @@ st.write("""
 ***
 """)
 
+## 7. Display wordcloud
+def draw_wordcloud(fd):
+    wc = WordCloud(width=1000, height=600, background_color='white', font_path='.fonts/NanumGothic.ttf')
+    plt.imshow(wc.generate_from_frequencies(fd))
+    plt.axis('off')
+    plt.show()
+
+fd_names_upper = {}
+for i in range(rank):
+    fd_names_upper[most_words[i][0]] = most_words[i][1]
+
+st.subheader('4. Top ranking image')
+if st.button('워드클라우드(상위랭크만) 표시'):
+    draw_wordcloud(fd_names_upper)
+    st.pyplot(plt)
+
+st.write("""
+***
+""")
